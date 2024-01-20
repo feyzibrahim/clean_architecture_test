@@ -1,10 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
-
-interface UserDocument extends Document {
-  id: number;
-  name: string;
-  email: string;
-}
+import mongoose, { Schema } from "mongoose";
+import { User } from "../../../../Entities/User";
 
 const userSchema = new Schema({
   id: Number,
@@ -12,4 +7,4 @@ const userSchema = new Schema({
   email: String,
 });
 
-export default mongoose.model<UserDocument>("User", userSchema);
+export default mongoose.model<User>("User", userSchema);

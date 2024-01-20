@@ -12,4 +12,12 @@ export class UserUseCase {
   createUser(userData: User): Promise<User> {
     return this.userInterface.createUser(userData);
   }
+
+  deleteAllUser(): Promise<boolean> {
+    return this.userInterface.deleteAllUser();
+  }
+
+  fetchUserWithEmail(email: string): Promise<User | boolean> {
+    return this.userInterface.fetchUserWithEmail(email);
+  }
 }

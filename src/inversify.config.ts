@@ -1,13 +1,26 @@
 import { Container } from "inversify";
-import TYPES from "./types";
-import { IAuthService } from "./interfaces/IAuthService";
-import { IUserRepository } from "./domain/repositories/IUserRepository";
-import { AuthService } from "./domain/services/AuthService";
-import { UserRepository } from "./repositories/UserRepository";
+import { UserController } from "./controller/UserController";
+import { UserUseCase } from "./useCases/UserUseCase";
+import {
+  connectToDatabase,
+  disconnectFromDatabase,
+} from "./config/dbConnection";
+import { UserAdapter } from "./adapter/Database/MongoDB/UserAdapter";
+import { UserInterface } from "./interface/UserInterface";
+
+// Database connection
+connectToDatabase();
 
 const container = new Container();
 
-container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
-container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
+container.bind<UserInterface>("UserInterface").to(UserAdapter);
+container.bind<UserController>(UserController).toSelf();
+container.bind<UserUseCase>(UserUseCase).toSelf();
+
+// Disconnect From Database
+process.on("SIGINT", async () => {
+  await disconnectFromDatabase();
+  process.exit(0);
+});
 
 export default container;
